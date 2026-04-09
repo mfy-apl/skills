@@ -1,17 +1,73 @@
 {
-  "owner": "mfy-apl",
-  "slug": "airport-pickups-london",
-  "displayName": "Airport Pickups London",
-  "latest": {
-    "version": "1.0.3",
-    "publishedAt": 1774663913983,
-    "commit": "https://github.com/openclaw/skills/commit/ba267967e7d45b608650a4e5e9e962391793d261"
+  "schema_version": "1.0",
+  "name": "airport-pickups-london",
+  "display_name": "Airport Pickups London",
+  "version": "1.1.0",
+  "description": "Book UK airport and cruise port transfers via Airport Pickups London. Get instant fixed-price quotes, validate flights, create bookings, amend, cancel, and track drivers live. Requires API key (free instant registration).",
+  "author": "mfy-apl",
+  "license": "MIT-0",
+  "homepage": "https://www.airport-pickups-london.com",
+  "repository": "https://github.com/mfy-apl/apl-mcp-server",
+  "tags": ["mcp", "booking", "airport", "transfer", "taxi", "london", "travel", "cruise", "driver-tracking"],
+  "runtime": {
+    "type": "remote-mcp",
+    "url": "https://mcp.airport-pickups-london.com/mcp",
+    "transport": "streamable-http"
   },
-  "history": [
-    {
-      "version": "1.0.2",
-      "publishedAt": 1773101052798,
-      "commit": "https://github.com/openclaw/skills/commit/53914703c14446e689edd5d7bf2086749f4fd8a9"
+  "env_vars": [],
+  "env_vars_required": false,
+  "primary_credential": "x-api-key",
+  "credentials": {
+    "api_key": {
+      "type": "header",
+      "header_name": "x-api-key",
+      "description": "API key for authenticating with the APL MCP server. Get one free and instantly by calling POST https://mcp.airport-pickups-london.com/a2a/register with {\"name\": \"Your Agent Name\", \"email\": \"you@example.com\"}",
+      "required": true,
+      "registration_url": "https://mcp.airport-pickups-london.com/a2a/register"
     }
-  ]
+  },
+  "tools": [
+    {
+      "name": "london_airport_transfer_quote",
+      "alias": "get_quote",
+      "description": "Get fixed-price transfer quotes for any UK route"
+    },
+    {
+      "name": "book_london_airport_transfer",
+      "alias": "book_transfer",
+      "description": "Create a confirmed transfer booking"
+    },
+    {
+      "name": "validate_flight",
+      "description": "Verify flight number and get terminal, airline, arrival time"
+    },
+    {
+      "name": "lookup_booking",
+      "description": "Look up booking details and status by reference number"
+    },
+    {
+      "name": "amend_booking",
+      "description": "Modify booking — change passenger info, date/time, flight, special requests"
+    },
+    {
+      "name": "cancel_booking",
+      "description": "Cancel a booking. Free cancellation 12+ hours before pickup"
+    },
+    {
+      "name": "track_driver",
+      "description": "Live driver GPS tracking with ETA, vehicle details, and photo"
+    },
+    {
+      "name": "get_service_info",
+      "description": "FAQ — cancellation policy, payments, vehicles, meet and greet, child seats, accessibility"
+    }
+  ],
+  "security": {
+    "authentication": "API key required via x-api-key header. Free self-service registration at /a2a/register. No env vars or hardcoded secrets.",
+    "data_sent": ["pickup/dropoff locations", "passenger name", "phone", "email", "flight number"],
+    "data_stored": "Booking details stored by Airport Pickups London for service delivery. GDPR compliant.",
+    "data_retention": "Booking data retained for legal/operational requirements per GDPR",
+    "network": "HTTPS only, TLS 1.2+",
+    "note": "API key authenticates the agent, not the end user. All tools are rate-limited (60 req/min). Booking and cancellation tools are transactional and require explicit user confirmation."
+  }
 }
